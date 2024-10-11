@@ -38,9 +38,9 @@ export class CartsManager {
         };
     };
 
-    addProductsToCart = async (cid, pid) => {
+    addProductsToCart = async (cid, pid, userRole) => {
         try {
-            return await service.addProductsToCart(cid, pid);
+            return await service.addProductsToCart(cid, pid, userRole);
         } catch (err) {
             return err.message;
         };

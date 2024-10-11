@@ -107,11 +107,13 @@ router.post("/:id/products/:pid", verifyToken, handlePolicies(["self"]), async (
     return res.status(401).send("Usuario no autenticado.");
   }
 
-  const user = req.session.user;
+  const userRole = req.session.user.role;
+
+  console.log("REQ.SESSION.USER: ", req.session.user.role);
 
   try {
     
-    const newProduct = await manager.addProductsToCart(cid, pid, user._id);
+    const newProduct = await manager.addProductsToCart(cid, pid, userRole);
 
     res.redirect(`/carts/${cid}`);
 
@@ -152,7 +154,10 @@ router.delete("/:id/products/:pid", async (req, res) => {
     const pid = req.params.pid;
 
     const cartId = await manager.removeProductToCart(cid, pid);
-    res.redirect(`/carts/${cid}`)
+    console.log("producto eliminado");
+    // res.redirect("/products");
+
+    res.status(200).json({ status: "success", message: "Producto eliminado" });
 } catch(err){
     res.status(400).send({
       status: "ERROR",

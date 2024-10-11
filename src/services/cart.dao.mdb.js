@@ -48,17 +48,19 @@ export class CartsService {
     }
   }
 
-  async addProductsToCart(cid, pid, userId) {
+  async addProductsToCart(cid, pid, role) {
     const productId = { _id : pid};
     const cartId = { _id : cid};
 
     const cart = await this.getCartById(cartId);
+    const userRole = role;
+    console.log("ROLE: ", userRole);
 
     try {
       
       const product = await manager.getProductById(productId);
 
-      if(product.owner === "ADMIN" || product.owner === userId || product.owner === "USER" || !product.owner){
+      if( product.owner === userRole  || userRole === "ADMIN"  || userRole === "USER" ){
         const productInCart = cart.products.find(p => p && p._id && p._id.toString() === pid) ? "yes" : "no";
         let body;
         const options = {new: true};;
